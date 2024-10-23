@@ -17,7 +17,10 @@ class BuildPlugin : Plugin<Project> {
 
                 it.extensions.findByType<PublishingExtension>()?.apply {
                     setupMavenPublishing(it)
-                    it.extensions.findByType<SigningExtension>()?.setupSigning(this)
+                    val signEnabled = System.getenv("SIGNING_ENABLED")?.toBoolean() != false
+                    if (signEnabled) {
+                        it.extensions.findByType<SigningExtension>()?.setupSigning(this)
+                    }
                 }
             }
         }
