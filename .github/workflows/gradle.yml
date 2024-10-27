@@ -51,7 +51,7 @@ jobs:
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
         
     - name: Build Android
-      if: ${{ martrix.os == 'Android' }}
+      if: ${{ matrix.os == 'Android' }}
       run: ./gradlew :gallery:assembleRelease
       
     - name: Build Desktop
