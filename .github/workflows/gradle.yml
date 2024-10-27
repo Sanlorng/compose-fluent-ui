@@ -51,6 +51,7 @@ jobs:
         name: distributions
     - name: download-distributions
       run: ls -R ~/build_artifacts/distributions
+      continue-on-error: true
         
     - name: Build with Gradle Wrapper
       run: |
