@@ -53,7 +53,18 @@ jobs:
         
     - name: Build Android
       if: ${{ matrix.type == 'Android' }}
-      run: ./gradlew :gallery:assembleRelease
+      run: |
+        echo "$ANDROID_KEYSTORE" | base64 --decode > ${{ github.workspace }}/android_sign_key.jks
+        echo "$ANDROID_SIGNING_PASSWORD"
+        echo "$ANDROID_SIGNING_KEY_ALIAS"
+        echo "$ANDROID_SIGNING_KEY_PASSWORD"
+        ./gradlew :gallery:assembleRelease
+      env:
+        ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+        ANDROID_SIGNING_FILE: ${{ github.workspace }}/android_sign_key.jks
+        ANDROID_SIGNING_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        ANDROID_SIGNING_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        ANDROID_SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       
     - name: Build Desktop
       if: ${{ matrix.isDesktop }}
@@ -71,4 +82,5 @@ jobs:
             ${{ github.workspace }}/gallery/build/compose/**/*.dmg
             ${{ github.workspace }}/gallery/build/compose/**/*.pkg
             ${{ github.workspace }}/gallery/**/*.apk
+            ${{ github.workspace }}/android_sign_key.jks
       
