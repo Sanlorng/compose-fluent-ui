@@ -13,15 +13,6 @@ on:
     branches: [ "dev" ]
 
 jobs:
-  upload_artifact:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: ls -R ${{ github.workspace }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: distributions
-          path: ${{ github.workspace }}/README.md
           
   build:
 
@@ -30,13 +21,10 @@ jobs:
         os: [windows-latest, ubuntu-latest, macos-latest]
         include:
           - os: ubuntu-latest
-            includeAndroid: true
             
           - os: macos-latest
-            includeIos: true
             
           - os: windows-latest
-            includeWasm: true
     runs-on: ${{ matrix.os }}
       
     permissions:
@@ -54,22 +42,19 @@ jobs:
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-
-    - uses: actions/download-artifact@v4
-      with:
-        path: ~/build_artifacts/
-        name: distributions
-    - name: download-distributions
-      run: ls -R ~/build_artifacts/
         
     - name: Build with Gradle Wrapper
       run: |
         ./gradlew :gallery:packageReleaseDistributionForCurrentOS
-        cp -r ${{github.workspace}}/gallery/build/compose/binaries/main/* ~/build_artifacts/
-    - name: Repack artifacts
+    - name: pack artifacts
       uses: actions/upload-artifact@v4
       with:
-          name: distributions
-          path: ~/build_artifacts/
-          overwrite: true
+          name: distributions-${{ runnner.os }}
+          path: |
+            ${{ github.workspace }}/gallery/build/compose/**/*.deb
+            ${{ github.workspace }}/gallery/build/compose/**/*.rpm
+            ${{ github.workspace }}/gallery/build/compose/**/*.msi
+            ${{ github.workspace }}/gallery/build/compose/**/*.exe
+            ${{ github.workspace }}/gallery/build/compose/**/*.dmg
+            ${{ github.workspace }}/gallery/build/compose/**/*.pkg
       
