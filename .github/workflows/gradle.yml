@@ -18,13 +18,18 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        type: [Android, Windows, Linux, macOS]
+        isDesktop: [true]
         include:
-          - os: ubuntu-latest
-            
-          - os: macos-latest
-            
-          - os: windows-latest
+          - type: Android
+            isDesktop: false
+            os: macos-latest
+          - type: Windows 
+            os: windows-latest
+          - type: Linux
+            os: ubuntu-latest
+          - type: macOS
+            os: macos-latest
     runs-on: ${{ matrix.os }}
       
     permissions:
@@ -45,13 +50,18 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
         
-    - name: Build with Gradle Wrapper
+    - name: Build Android
+      if: ${{ martix.os == 'Android' }}
+      run: ./gradlew :gallery:assembleRelease
+      
+    - name: Build Desktop
+      if: ${{ matrix.isDesktop }}
       run: |
         ./gradlew :gallery:packageReleaseDistributionForCurrentOS
     - name: pack artifacts
       uses: actions/upload-artifact@v4
       with:
-          name: distributions-${{ runner.os }}
+          name: distributions-${{ matrix.type }}
           path: |
             ${{ github.workspace }}/gallery/build/compose/**/*.deb
             ${{ github.workspace }}/gallery/build/compose/**/*.rpm
@@ -59,4 +69,5 @@ jobs:
             ${{ github.workspace }}/gallery/build/compose/**/*.exe
             ${{ github.workspace }}/gallery/build/compose/**/*.dmg
             ${{ github.workspace }}/gallery/build/compose/**/*.pkg
+            ${{ github.workspace }}/gallery/**/*.apk
       
