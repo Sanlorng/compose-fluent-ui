@@ -13,6 +13,14 @@ on:
     branches: [ "dev" ]
 
 jobs:
+  upload_artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/upload-artifact@v4
+        with:
+          name: distributions
+          path: ${{ github.workspace }}/README.md
+          
   build:
 
     strategy:
@@ -46,20 +54,13 @@ jobs:
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
     - name: Create Dirs
-      run: |
-        ls -R $workspace
-
-    - uses: actions/upload-artifact@v4
-      with:
-        name: distributions
-        path: ${{ github.workspace }}/README.md
 
     - uses: actions/download-artifact@v4
       with:
-        path: ~/build_artifacts/distributions
+        path: ~/build_artifacts/
         name: distributions
     - name: download-distributions
-      run: ls -R ~/build_artifacts/distributions
+      run: ls -R ~/build_artifacts/
         
     - name: Build with Gradle Wrapper
       run: |
