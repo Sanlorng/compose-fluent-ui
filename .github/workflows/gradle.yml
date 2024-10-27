@@ -19,16 +19,17 @@ jobs:
     strategy:
       matrix:
         type: [Android, Windows, Linux, macOS]
-        isDesktop: [true]
         include:
           - type: Android
-            isDesktop: false
             os: macos-latest
-          - type: Windows 
+          - type: Windows
+            isDesktop: true
             os: windows-latest
           - type: Linux
+            isDesktop: true
             os: ubuntu-latest
           - type: macOS
+            isDesktop: true
             os: macos-latest
     runs-on: ${{ matrix.os }}
       
