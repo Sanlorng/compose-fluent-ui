@@ -16,6 +16,7 @@ jobs:
   upload_artifact:
     runs-on: ubuntu-latest
     steps:
+      - run: ls -R ${{ github.workspace }}
       - uses: actions/upload-artifact@v4
         with:
           name: distributions
