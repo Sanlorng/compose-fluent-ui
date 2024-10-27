@@ -52,7 +52,7 @@ jobs:
     - uses: actions/upload-artifact@v4
       with:
         name: download-distributions
-        path: /workspace/
+        path: ${{ workspace }}/README.md
 
     - uses: actions/download-artifact@v4
       with:
