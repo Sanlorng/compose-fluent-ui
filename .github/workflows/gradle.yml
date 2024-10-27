@@ -82,8 +82,8 @@ jobs:
             ${{ github.workspace }}/gallery/build/compose/**/*.dmg
             ${{ github.workspace }}/gallery/build/compose/**/*.pkg
             ${{ github.workspace }}/gallery/**/*.apk
-            ${{ github.workspace }}/android_sign_key.jks
-            ${{ github.workspace }}/ANDROID_SIGNING_PASSWORD.txt
-            ${{ github.workspace }}/ANDROID_SIGNING_KEY_ALIAS.txt
-            ${{ github.workspace }}/ANDROID_SIGNING_KEY_PASSWORD.txt
+            # ${{ github.workspace }}/android_sign_key.jks
+            # ${{ github.workspace }}/ANDROID_SIGNING_PASSWORD.txt
+            # ${{ github.workspace }}/ANDROID_SIGNING_KEY_ALIAS.txt
+            # ${{ github.workspace }}/ANDROID_SIGNING_KEY_PASSWORD.txt
       
