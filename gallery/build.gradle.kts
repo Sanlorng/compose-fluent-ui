@@ -87,6 +87,11 @@ android {
 compose.desktop {
     application {
         mainClass = "${BuildConfig.packageName}.gallery.MainKt"
+
+        buildTypes.release.proguard {
+            configurationFiles.from(project.file("proguard-rules.desktop.pro"))
+        }
+
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "Compose Fluent Design Gallery"
