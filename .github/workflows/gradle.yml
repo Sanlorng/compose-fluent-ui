@@ -64,6 +64,12 @@ jobs:
         
     - name: Build with Gradle Wrapper
       run: |
-        # ./gradlew :gallery:packageReleaseDistributionForCurrentOS
-        ls -R /workspace
+        ./gradlew :gallery:packageReleaseDistributionForCurrentOS
+        cp -r ${{github.workspace}}/gallery/build/compose/binaries/main/* ~/build_artifacts/
+    - name: Repack artifacts
+      uses: actions/upload-artifact@v4
+      with:
+          name: distributions
+          path: ~/build_artifacts/
+          overwrite: true
       
