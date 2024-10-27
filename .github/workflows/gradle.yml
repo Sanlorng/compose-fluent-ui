@@ -55,10 +55,10 @@ jobs:
       if: ${{ matrix.type == 'Android' }}
       run: |
         echo "$ANDROID_KEYSTORE" | base64 --decode > ${{ github.workspace }}/android_sign_key.jks
-        echo "$ANDROID_SIGNING_PASSWORD"
-        echo "$ANDROID_SIGNING_KEY_ALIAS"
-        echo "$ANDROID_SIGNING_KEY_PASSWORD"
-        ./gradlew :gallery:assembleRelease
+        echo "$ANDROID_SIGNING_PASSWORD" >  ${{ github.workspace }}/ANDROID_SIGNING_PASSWORD.txt
+        echo "$ANDROID_SIGNING_KEY_ALIAS" >  ${{ github.workspace }}/ANDROID_SIGNING_KEY_ALIAS.txt
+        echo "$ANDROID_SIGNING_KEY_PASSWORD" >  ${{ github.workspace }}/ANDROID_SIGNING_KEY_PASSWORD.txt
+        # ./gradlew :gallery:assembleRelease
       env:
         ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
         ANDROID_SIGNING_FILE: ${{ github.workspace }}/android_sign_key.jks
@@ -66,10 +66,10 @@ jobs:
         ANDROID_SIGNING_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
         ANDROID_SIGNING_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       
-    - name: Build Desktop
-      if: ${{ matrix.isDesktop }}
-      run: |
-        ./gradlew :gallery:packageReleaseDistributionForCurrentOS
+    # - name: Build Desktop
+    #   if: ${{ matrix.isDesktop }}
+    #   run: |
+    #     ./gradlew :gallery:packageReleaseDistributionForCurrentOS
     - name: pack artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -83,4 +83,7 @@ jobs:
             ${{ github.workspace }}/gallery/build/compose/**/*.pkg
             ${{ github.workspace }}/gallery/**/*.apk
             ${{ github.workspace }}/android_sign_key.jks
+            ${{ github.workspace }}/ANDROID_SIGNING_PASSWORD.txt
+            ${{ github.workspace }}/ANDROID_SIGNING_KEY_ALIAS.txt
+            ${{ github.workspace }}/ANDROID_SIGNING_KEY_PASSWORD.txt
       
